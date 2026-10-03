@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ENTANGLED: The Shadow Labyrinth | Superdense Coding Adventure</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💎</text></svg>">
+</head>
+<body>
+
+    <!-- ====================================================================
+         SHADOW FIGHT 2 STYLE INTRO CINEMATIC OVERLAY & CONTROLS
+         ==================================================================== -->
+    <div id="intro-overlay">
+        <canvas id="intro-canvas"></canvas>
+        <button id="skip-intro-btn">SKIP INTRO ➔</button>
+
+        <!-- Intro Navigation Bar for Reading at User's Own Pace -->
+        <div class="intro-controls-bar">
+            <button id="intro-back-btn" class="intro-nav-btn">◀ PREV</button>
+            <span id="intro-act-indicator" class="intro-act-tag">ACT I of 6</span>
+            <button id="intro-pause-btn" class="intro-nav-btn">⏸ PAUSE</button>
+            <button id="intro-next-btn" class="intro-nav-btn">NEXT ▶</button>
+            <button id="intro-voice-btn" class="intro-nav-btn voice-btn">🎙️ VOICE: ON</button>
+        </div>
+    </div>
+
+    <!-- ====================================================================
+         APP HEADER
+         ==================================================================== -->
+    <header class="app-header">
+        <div class="logo-group">
+            <span class="kanji-crest">☯ 量子</span>
+            <h1 class="game-title">ENTANGLED : THE SHADOW LABYRINTH</h1>
+            <span class="title-tagline">SUPERDENSE CODING QUANTUM ADVENTURE</span>
+        </div>
+        <div class="header-controls">
+            <!-- 3 Lives Display (❤️❤️❤️) -->
+            <div id="lives-display" class="lives-pill" title="Entanglement Coherence Lives: 3 wrong moves break entanglement!">
+                ❤️❤️❤️
+            </div>
+
+            <!-- Points / Chrono-Shards System -->
+            <div class="points-pill" title="Earn Shards by transmitting and decoding correctly!">
+                💎 Shards: <span id="shards-counter">150</span>
+            </div>
+
+            <!-- Level Selector -->
+            <select id="level-select" class="level-dropdown">
+                <option value="0">Level 0: The Quantum Dojo (Learn all 4 Gates)</option>
+                <option value="1">Level 1: The Quantum Spark (Entrance Corridor)</option>
+                <option value="2">Level 2: The Fork of Peril (Spike Pit)</option>
+                <option value="3">Level 3: The Abyssal Descent (Catacombs)</option>
+                <option value="4">Level 4: The Four Runes & Jade Key</option>
+                <option value="5">Level 5: The Seismic Bridge (Oscillating Spikes)</option>
+                <option value="6">Level 6: Vault of Chrono-Crystal (Final Vault)</option>
+            </select>
+
+            <button id="open-codex-btn" class="control-btn gold-btn">📜 Quantum Codex</button>
+            <button id="audio-toggle-btn" class="control-btn">🔊 Sound: ON</button>
+            <button id="restart-level-btn" class="control-btn">🔄 Restart</button>
+            <button id="replay-intro-btn" class="control-btn">🎬 Intro</button>
+        </div>
+    </header>
+
+    <!-- ====================================================================
+         LEVEL BANNER & OBJECTIVE NOTICE
+         ==================================================================== -->
+    <section class="level-banner">
+        <div class="banner-left">
+            <span id="level-chapter" class="chapter-label">TUTORIAL ARENA : 4-GATE MASTER TRIAL</span>
+            <h2 id="level-title" class="level-heading">LEVEL 0 : THE QUANTUM DOJO</h2>
+            <p id="level-story-notice" class="banner-story-notice">
+                Chamber 1: Gate [I] (00 - UP). Chamber 2: Gate [X] (01 - RIGHT). Chamber 3: Gate [Z] (10 - DOWN). Chamber 4: Gate [XZ] (11 - LEFT into the Dojo Shrine).
+            </p>
+        </div>
+        <div class="banner-right">
+            <div id="level-hint" class="objective-box">
+                💡 Objective: Step 1: Gate I (UP). Step 2: Gate X (RIGHT). Step 3: Gate Z (DOWN). Step 4: Gate XZ (LEFT to Exit)!
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================================
+         MAIN GAMEPLAY HUD - SPLIT SCREEN
+         ==================================================================== -->
+    <main class="game-container">
+        
+        <!-- LEFT PANEL: ALICE'S CARTOGRAPHY & QUANTUM TRANSMITTER -->
+        <section class="hud-panel alice-panel">
+            <div class="panel-header">
+                <h3 class="panel-title alice-title">
+                    🗺️ ALICE : OBSERVER TABLE
+                </h3>
+                <span class="role-badge alice">OUTSIDE (HAS MAP)</span>
+            </div>
+            
+            <div class="canvas-viewport">
+                <canvas id="alice-map-canvas" class="game-canvas" width="460" height="380"></canvas>
+            </div>
+
+            <!-- Alice's Transmitter Station -->
+            <div class="alice-controls">
+                <div class="section-label">Select Movement Instruction & Quantum Gate</div>
+                <div class="gate-buttons-grid">
+                    <!-- UP: Gate I (00) -->
+                    <button class="gate-btn active" data-gate="I" data-direction="UP">
+                        <div class="gate-btn-header">
+                            <span class="gate-symbol">[ I ] Identity</span>
+                            <span class="gate-dir">⬆️ UP</span>
+                        </div>
+                        <span class="gate-bits-sub">Bits: 00 | |Φ⁺⟩ Preserved</span>
+                    </button>
+
+                    <!-- RIGHT: Gate X (01) -->
+                    <button class="gate-btn" data-gate="X" data-direction="RIGHT">
+                        <div class="gate-btn-header">
+                            <span class="gate-symbol">[ X ] Bit-Flip</span>
+                            <span class="gate-dir">➡️ RIGHT</span>
+                        </div>
+                        <span class="gate-bits-sub">Bits: 01 | |Ψ⁺⟩ Prepared</span>
+                    </button>
+
+                    <!-- DOWN: Gate Z (10) -->
+                    <button class="gate-btn" data-gate="Z" data-direction="DOWN">
+                        <div class="gate-btn-header">
+                            <span class="gate-symbol">[ Z ] Phase-Flip</span>
+                            <span class="gate-dir">⬇️ DOWN</span>
+                        </div>
+                        <span class="gate-bits-sub">Bits: 10 | |Φ⁻⟩ Prepared</span>
+                    </button>
+
+                    <!-- LEFT: Gate XZ (11) -->
+                    <button class="gate-btn" data-gate="XZ" data-direction="LEFT">
+                        <div class="gate-btn-header">
+                            <span class="gate-symbol">[ XZ ] Bit+Phase</span>
+                            <span class="gate-dir">⬅️ LEFT</span>
+                        </div>
+                        <span class="gate-bits-sub">Bits: 11 | |Ψ⁻⟩ Prepared</span>
+                    </button>
+                </div>
+
+                <!-- Quantum State Formula Preview -->
+                <div id="alice-gate-preview" class="quantum-state-preview">
+                    <div class="quantum-formula">
+                        <strong>Operation:</strong> Qubit A ⟵ Gate [I]<br>
+                        <strong>Encodes:</strong> "00" (UP)<br>
+                        <strong>Bell State Prepared:</strong> <span class="cyan">|Φ⁺⟩ = (|00⟩ + |11⟩)/√2</span>
+                    </div>
+                </div>
+
+                <!-- Transmit & Hint Row -->
+                <div class="alice-actions-row">
+                    <button id="transmit-btn" class="transmit-action-btn">
+                        ⚡ TRANSMIT QUBIT (SPACE)
+                    </button>
+                    <button id="use-hint-btn" class="hint-action-btn" title="Costs 50 Chrono-Shards to highlight the optimal quantum gate!">
+                        💡 HINT (50 💎)
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- CENTER PANEL: QUANTUM WAVEGUIDE CHANNEL -->
+        <section class="waveguide-channel">
+            <div class="waveguide-header">
+                <span class="waveguide-title">QUANTUM WAVEGUIDE</span>
+            </div>
+
+            <div class="waveguide-canvas-box">
+                <canvas id="waveguide-canvas" width="160" height="340"></canvas>
+            </div>
+
+            <div id="channel-status" class="channel-status-box">
+                Ready. Pre-shared Bell state active.
+            </div>
+
+            <div class="quantum-efficiency-meter">
+                <div>CHANNEL EFFICIENCY</div>
+                <div class="efficiency-val">200% (2 Bits/Qubit)</div>
+            </div>
+        </section>
+
+        <!-- RIGHT PANEL: BOB'S IN-CAVE DARK VIEW & RECEIVER CONSOLE -->
+        <section class="hud-panel bob-panel">
+            <div class="panel-header">
+                <h3 class="panel-title bob-title">
+                    🔦 BOB : DARK LABYRINTH
+                </h3>
+                <span class="role-badge bob">INSIDE (NO LIGHT / NO MAP)</span>
+            </div>
+
+            <div class="canvas-viewport">
+                <canvas id="bob-cave-canvas" class="game-canvas" width="460" height="380"></canvas>
+            </div>
+
+            <!-- Bob's Status and Movement Console -->
+            <div class="bob-controls">
+                <div class="bob-status-row">
+                    <div class="health-meter-box">
+                        <div class="health-bar-bg">
+                            <div id="bob-health-fill"></div>
+                        </div>
+                        <span id="bob-health-text" class="health-text">100 / 100 HP</span>
+                    </div>
+                    <span id="bob-lives-label" class="status-badge" style="border: 1px solid var(--red); color: var(--red);">3 / 3 Lives</span>
+                    <span id="bob-key-badge" class="status-badge key-inactive">🗝️ No Key</span>
+                </div>
+
+                <!-- Interactive Quantum Decoder Circuit Box -->
+                <div class="decoder-circuit-box">
+                    <div class="decoder-header">
+                        <span>🔬 BOB'S QUANTUM DECODER CIRCUIT</span>
+                        <label class="auto-toggle">
+                            <input type="checkbox" id="auto-decode-toggle"> Auto-Decode
+                        </label>
+                    </div>
+
+                    <div class="circuit-wire-diagram">
+                        <div class="wire-row">
+                            <span class="wire-label">Qubit A (Received):</span>
+                            <span class="wire-line">───────●───────[ H ]───────[ M ] ──> Bit 1</span>
+                        </div>
+                        <div class="wire-row">
+                            <span class="wire-label">Qubit B (Stored):</span>
+                            <span class="wire-line">───────⊕───────────────────[ M ] ──> Bit 2</span>
+                        </div>
+                    </div>
+
+                    <div id="decoder-state-text" class="decoder-stage-status">
+                        Awaiting incoming photon from Alice...
+                    </div>
+
+                    <!-- Step-by-Step Educational Theory Card -->
+                    <div id="decoder-theory-card" class="decoder-theory-card">
+                        <strong>Quantum Decoder Standby:</strong>
+                        Alice must encode 2 classical bits into her single qubit and transmit it across the waveguide channel.
+                    </div>
+
+                    <div class="decoder-step-buttons">
+                        <button id="bob-cnot-btn" class="circuit-gate-btn" disabled>
+                            1. CNOT Gate
+                        </button>
+                        <button id="bob-hadamard-btn" class="circuit-gate-btn" disabled>
+                            2. Hadamard (H)
+                        </button>
+                        <button id="bob-measure-btn" class="circuit-gate-btn" disabled>
+                            3. Measure State
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Decoded Quantum Instruction Display -->
+                <div class="decoded-instruction-box">
+                    <div id="bob-decoded-instruction">
+                        <div class="decoded-badge">
+                            <span class="decoded-arrow">NO SIGNAL</span>
+                            <span class="decoded-bits">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bob Move Controls (Strict Quantum Move - No Direct Keys) -->
+                <div class="bob-movement-actions">
+                    <button id="bob-execute-move-btn" class="execute-move-btn" disabled>
+                        WAITING FOR DECODE...
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ====================================================================
+         BOTTOM TELEMETRY & EDUCATIONAL LOGS
+         ==================================================================== -->
+    <footer class="telemetry-panel">
+        <div class="telemetry-header">
+            <h4 class="telemetry-title">🔬 QUANTUM PROTOCOL TELEMETRY & DISENTANGLEMENT AUDIT</h4>
+            <div class="telemetry-stats-bar">
+                <span>Physical Qubits Sent: <strong id="stats-qubits-sent">0</strong></span>
+                <span>Classical Bits Decoded: <strong id="stats-bits-decoded">0</strong></span>
+                <span>Channel Ratio: <strong>2:1 (Superdense Doubling)</strong></span>
+            </div>
+        </div>
+        <div id="quantum-telemetry-details">
+            <div class="telemetry-flow">
+                <div class="telemetry-step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <strong>Pre-Shared Entanglement:</strong>
+                        <p>Bell pair <code>|Φ⁺⟩ = (|00⟩ + |11⟩)/√2</code> created before Bob entered.</p>
+                    </div>
+                </div>
+                <div class="telemetry-step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <strong>Alice's Local Pauli Gate:</strong>
+                        <p>Alice applies one of {I, X, Z, XZ} on <em>only her single qubit</em>.</p>
+                    </div>
+                </div>
+                <div class="telemetry-step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <strong>Waveguide Flight:</strong>
+                        <p>Only <strong>1 physical qubit</strong> travels through cave stone to Bob.</p>
+                    </div>
+                </div>
+                <div class="telemetry-step highlight">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <strong>Bob's CNOT + H Decoder:</strong>
+                        <p>CNOT disentangles Qubit B. Hadamard turns phase into bit values!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ====================================================================
+         MODAL: QUANTUM CODEX & SUPERDENSE MANUAL
+         ==================================================================== -->
+    <div id="codex-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title">📜 SUPERDENSE CODING CODEX</h3>
+                <button id="close-codex-btn" class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4>What is Superdense Coding?</h4>
+                <p style="margin: 8px 0; color: #cbd5e1; line-height: 1.5;">
+                    Superdense coding is a quantum communication protocol discovered by <strong>Charles Bennett and Stephen Wiesner (1992)</strong>. It allows Alice to transmit <strong>two classical bits</strong> to Bob by sending only <strong>one physical qubit</strong>, provided they share prior quantum entanglement!
+                </p>
+
+                <h4 style="margin-top: 16px;">The 4-State Superdense Table</h4>
+                <table class="codex-table">
+                    <thead>
+                        <tr>
+                            <th>Bits</th>
+                            <th>Alice's Gate</th>
+                            <th>Resulting Bell State</th>
+                            <th>Game Movement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>00</code></td>
+                            <td><strong>I</strong> (Identity)</td>
+                            <td><code>|Φ⁺⟩ = (|00⟩ + |11⟩)/√2</code></td>
+                            <td>⬆️ UP</td>
+                        </tr>
+                        <tr>
+                            <td><code>01</code></td>
+                            <td><strong>X</strong> (Bit Flip)</td>
+                            <td><code>|Ψ⁺⟩ = (|10⟩ + |01⟩)/√2</code></td>
+                            <td>➡️ RIGHT</td>
+                        </tr>
+                        <tr>
+                            <td><code>10</code></td>
+                            <td><strong>Z</strong> (Phase Flip)</td>
+                            <td><code>|Φ⁻⟩ = (|00⟩ − |11⟩)/√2</code></td>
+                            <td>⬇️ DOWN</td>
+                        </tr>
+                        <tr>
+                            <td><code>11</code></td>
+                            <td><strong>XZ</strong> (Bit + Phase)</td>
+                            <td><code>|Ψ⁻⟩ = (|01⟩ − |10⟩)/√2</code></td>
+                            <td>⬅️ LEFT</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4 style="margin-top: 16px;">How Bob Decodes (Inverse Bell Measurement)</h4>
+                <p style="margin: 8px 0; color: #cbd5e1; line-height: 1.5;">
+                    Once Bob receives Alice's single qubit, he has both qubits of the pair. To read the two bits, he performs an inverse Bell measurement:
+                </p>
+                <ol style="margin-left: 20px; color: #cbd5e1; line-height: 1.6;">
+                    <li><strong>CNOT Gate:</strong> Uses Qubit A as control and Qubit B as target. This disentangles the system so Qubit B is strictly in $|0\rangle$ or $|1\rangle$.</li>
+                    <li><strong>Hadamard Gate:</strong> Applied to Qubit A. This converts phase differences into bit values.</li>
+                    <li><strong>Standard Measurement:</strong> Bob measures both qubits in the computational basis, deterministically yielding the exact two classical bits Alice selected!</li>
+                </ol>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn primary" onclick="document.getElementById('codex-modal').classList.remove('active')">Close Codex</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====================================================================
+         MODAL: LEVEL VICTORY
+         ==================================================================== -->
+    <div id="level-victory-modal" class="modal-overlay">
+        <div class="modal-card victory">
+            <div class="modal-header">
+                <h3 class="modal-title">🏆 LEVEL CLEARED!</h3>
+            </div>
+            <div class="modal-body">
+                <p id="victory-msg" style="font-size: 16px; margin-bottom: 16px; color: #f8fafc;"></p>
+                <div id="victory-stats" style="background: rgba(0,0,0,0.5); padding: 14px; border-radius: 6px; font-family: monospace; display: flex; flex-direction: column; gap: 8px;">
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="next-level-btn" class="modal-btn primary">NEXT LEVEL ➔</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====================================================================
+         MODAL: GAME OVER
+         ==================================================================== -->
+    <div id="game-over-modal" class="modal-overlay">
+        <div class="modal-card danger">
+            <div class="modal-header">
+                <h3 class="modal-title" style="color: var(--red);">💀 TRIAL FAILED</h3>
+            </div>
+            <div class="modal-body">
+                <p id="gameover-reason" style="font-size: 15px; margin-bottom: 12px; color: #fca5a5;"></p>
+                <p style="color: var(--text-dim); font-size: 13px;">The cave claimed another explorer. Re-evaluate Alice's map and navigate cautiously.</p>
+            </div>
+            <div class="modal-actions">
+                <button id="retry-gameover-btn" class="modal-btn danger">RETRY LEVEL 🔄</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="quantum.js"></script>
+    <script src="audio.js"></script>
+    <script src="intro.js"></script>
+    <script src="game.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
